@@ -1,19 +1,19 @@
-# config.py
 import os
 
-# Telegram
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
-# Stripe (si lo usas)
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
-
-# Webhook
-BASE_URL = os.getenv("BASE_URL")  # https://xxxx.up.railway.app
-WEBHOOK_PATH = "/telegram/webhook"
-WEBHOOK_URL = f"{BASE_URL}{WEBHOOK_PATH}"
-
-# Seguridad mínima
-if not TELEGRAM_TOKEN:
-    raise RuntimeError("❌ TELEGRAM_TOKEN no está definido")
+CHANNELS = {
+    "jacqueline": {
+        "price": os.environ.get("MODEL_1_PRICE"),
+        "chat_id": os.environ.get("MODEL_1_GROUP"),
+        "invite_link": "https://t.me/+Uj7U0zq16BU2NTU8"
+    },
+    "jennifer": {
+        "price": os.environ.get("MODEL_2_PRICE"),
+        "chat_id": os.environ.get("MODEL_2_GROUP"),
+        "invite_link": "https://t.me/+TOSx4VygAQExNjQ0"
+    }
+}
 

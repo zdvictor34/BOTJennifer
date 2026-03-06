@@ -1,25 +1,64 @@
-from flask import Flask, request
-from telegram import Bot, Update
-import config
+import os
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-app = Flask(__name__)
-bot = Bot(token=config.TELEGRAM_TOKEN)
+TOKEN = os.getenv("BOT_TOKEN")
 
-@app.route("/telegram/webhook", methods=["POST"])
-def telegram_webhook():
-    update = Update.de_json(request.get_json(force=True), bot)
-    
-    if update.message:  # Si llegó un mensaje
-        chat_id = update.message.chat.id
-        text = update.message.text or "¡Recibí tu mensaje!"
-        bot.send_message(chat_id=chat_id, text=f"Eco: {text}")
-    
-    return "ok", 200
+PAYMENT_LINK = "https://TU_LINK_DE_PAGO"
 
-@app.route("/")
-def index():
-    return "Bot activo y listo", 200
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    args = context.args
 
+    keyboard = [
+        [InlineKeyboardButton("🔥 Acceder al VIP de Jennifer", url=PAYMENT_LINK)]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    if args and args[0] == "vip":
+
+        await update.message.reply_text(
+"""🔥 Hola, soy Jennifer
+
+Estás a un paso de entrar a mi contenido privado 🔞
+
+Pulsa el botón para acceder al VIP""",
+        reply_markup=reply_markup
+        )
+
+    else:
+
+        await update.message.reply_text(
+"""🔥 Hola, soy Jennifer
+
+Bienvenido a mi chat privado.
+
+Escribe:
+
+/VIP"""
+        )
+
+
+async def vip(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    keyboard = [
+        [InlineKeyboardButton("🔥 Acceder al VIP de Jennifer", url=PAYMENT_LINK)]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_text(
+        "Pulsa el botón para acceder:",
+        reply_markup=reply_markup
+    )
+
+
+app = ApplicationBuilder().token(TOKEN).build()
+
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("vip", vip))
+
+print("BOT DE JENNIFER INICIADO")
+
+app.run_polling()
