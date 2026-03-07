@@ -4,22 +4,20 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 TOKEN = os.getenv("BOT_TOKEN")
 
-PAYMENT_LINK = "https://TU_LINK_DE_PAGO"
+STRIPE_LINK = "https://buy.stripe.com/6oUcN53tg0AI4wKbxycV202"
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
-        [InlineKeyboardButton("🔥 Acceder al VIP de Jennifer", url=PAYMENT_LINK)]
+        [InlineKeyboardButton("🔥 Unlock VIP Access", url=STRIPE_LINK)]
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-"""🔥 Hola, soy Jennifer
-
-Bienvenido a mi chat privado 🔞
-
-Escribe /VIP para acceder al contenido""",
+        "🔥 Welcome to Jennifer's private VIP chat\n\n"
+        "To access all exclusive content, please purchase VIP access below:",
         reply_markup=reply_markup
     )
 
@@ -27,18 +25,20 @@ Escribe /VIP para acceder al contenido""",
 async def vip(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
-        [InlineKeyboardButton("🔥 Acceder al VIP de Jennifer", url=PAYMENT_LINK)]
+        [InlineKeyboardButton("🔥 Unlock VIP Access", url=STRIPE_LINK)]
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-        "Pulsa el botón para desbloquear el VIP:",
+        "💎 VIP Access Required\n\n"
+        "Click the button below to unlock full content:",
         reply_markup=reply_markup
     )
 
 
 def main():
+
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
