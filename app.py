@@ -6,8 +6,14 @@ TOKEN = os.getenv("BOT_TOKEN")
 
 STRIPE_LINK = "https://buy.stripe.com/6oUcN53tg0AI4wKbxycV202"
 
+# Guardamos los usuarios que usan el bot
+user_ids = {}
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+    user_ids[user_id] = True
 
     keyboard = [
         [InlineKeyboardButton("🔥 Unlock VIP Access", url=STRIPE_LINK)]
@@ -38,7 +44,6 @@ async def vip(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main():
-
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
